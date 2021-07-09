@@ -1,0 +1,16 @@
+---
+
+- name: TINYPROXY | Install
+  include: install.yml
+  tags:
+    - tinyproxy_install
+
+- name: TINYPROXY | Configure
+  include: config.yml
+  tags:
+    - tinyproxy_configure
+
+- name: TINYPROXY | Service
+  include: service.yml
+  tags:
+    - tinyproxy_service

@@ -1,0 +1,101 @@
+---
+
+- name: TINYPROXY | Ensure tinyproxy group
+  group:
+    name: "{{ tinyproxy_group }}"
+    system: yes
+    state: present
+  tags:
+    - tinyproxy_install
+
+- name: TINYPROXY | Ensure tinyproxy user
+  user:
+    name: "{{ tinyproxy_user }}"
+    group: "{{ tinyproxy_group }}"
+    system: yes
+    shell: "{{ tinyproxy_user_shell }}"
+    createhome: no
+  tags:
+    - tinyproxy_install
+
+- name: TINYPROXY | Ensure skeleton log paths
+  file:
+    dest: "{{ tinyproxy_log_path }}"
+    owner: "{{ tinyproxy_user }}"
+    group: "{{ tinyproxy_group }}"
+    state: directory
+  when: tinyproxy_log_file is defined
+  tags:
+    - tinyproxy_install
+
+- name: TINYPROXY | Check tinyproxy version
+  command: "{{ tinyproxy_exec_name }} -v"
+  register: tinyproxy_check
+  changed_when: false
+  ignore_errors: true
+  check_mode: no
+  tags:
+    - tinyproxy_install
+
+- name: TINYPROXY | Download package
+  get_url:
+    url: "{{ tinyproxy_url }}"
+    dest: "{{ tinyproxy_package_path }}"
+  when: tinyproxy_force_reinstall or tinyproxy_check is failed or tinyproxy_version not in tinyproxy_check.stdout
+  tags:
+    - tinyproxy_install
+
+- name: TINYPROXY | Extract downloaded package
+  unarchive:
+    src: "{{ tinyproxy_package_path }}"
+    dest: "{{ tinyproxy_download_path }}"
+    remote_src: True
+  when: tinyproxy_force_reinstall or tinyproxy_check is failed or tinyproxy_version not in tinyproxy_check.stdout
+  notify: restart tinyproxy
+  tags:
+    - tinyproxy_install
+
+- name: TINYPROXY | Autogen install
+  command: ./autogen.sh
+  args:
+    chdir: "{{ tinyproxy_download_path }}/{{ tinyproxy_release_name }}/"
+  when: tinyproxy_force_reinstall or tinyproxy_check is failed or tinyproxy_version not in tinyproxy_check.stdout
+  notify: restart tinyproxy
+  tags:
+    - tinyproxy_install
+
+- name: TINYPROXY | Configure install
+  command: ./configure
+  args:
+    chdir: "{{ tinyproxy_download_path }}/{{ tinyproxy_release_name }}/"
+  when: tinyproxy_force_reinstall or tinyproxy_check is failed or tinyproxy_version not in tinyproxy_check.stdout
+  notify: restart tinyproxy
+  tags:
+    - tinyproxy_install
+
+- name: TINYPROXY | Make
+  make:
+    chdir: "{{ tinyproxy_download_path }}/{{ tinyproxy_release_name }}/"
+    target:
+  when: tinyproxy_force_reinstall or tinyproxy_check is failed or tinyproxy_version not in tinyproxy_check.stdout
+  notify: restart tinyproxy
+  tags:
+    - tinyproxy_install
+
+- name: TINYPROXY | Make install
+  make:
+    chdir: "{{ tinyproxy_download_path }}/{{ tinyproxy_release_name }}/"
+    target: install
+  when: tinyproxy_force_reinstall or tinyproxy_check is failed or tinyproxy_version not in tinyproxy_check.stdout
+  notify: restart tinyproxy
+  tags:
+    - tinyproxy_install
+
+- name: TINYPROXY | Link binary
+  file:
+    src: "{{ tinyproxy_bin_path }}/{{ tinyproxy_exec_name }}"
+    dest: "/usr/bin/{{ tinyproxy_exec_name }}"
+    state: link
+  when: tinyproxy_force_reinstall or tinyproxy_check is failed or tinyproxy_version not in tinyproxy_check.stdout
+  tags:
+    - tinyproxy_install

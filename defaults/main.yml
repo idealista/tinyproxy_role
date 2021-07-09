@@ -1,0 +1,77 @@
+---
+
+## General
+tinyproxy_flavour: tinyproxy
+
+# Version
+tinyproxy_version: 1.11.0
+tinyproxy_release_system: linux_amd64
+
+# Package URL
+tinyproxy_release_name: "tinyproxy-{{ tinyproxy_version }}"
+tinyproxy_package: "{{ tinyproxy_release_name }}.tar.gz"
+tinyproxy_url: "https://github.com/tinyproxy/tinyproxy/releases/download/{{ tinyproxy_version }}/{{ tinyproxy_package }}"
+
+# Package paths
+tinyproxy_download_path: /usr/local
+tinyproxy_package_path: "{{ tinyproxy_download_path }}/{{ tinyproxy_package }}"
+tinyproxy_src_bin: "{{ tinyproxy_download_path }}/{{ tinyproxy_release_name }}/src/{{ tinyproxy_exec_name }}"
+
+# Set true to force the download and installation of the binary
+tinyproxy_force_reinstall: false
+
+# Installation path
+tinyproxy_root_path: "{{ tinyproxy_download_path }}/{{ tinyproxy_release_name }}"
+tinyproxy_bin_path: "{{ tinyproxy_root_path }}/src"
+tinyproxy_exec_name: tinyproxy
+
+# Config
+tinyproxy_config_template_file: "templates/tinyproxy/tinyproxy.conf.j2"
+tinyproxy_user_conf: nobody
+tinyproxy_group_conf: nogroup
+tinyproxy_port: 80
+tinyproxy_timeout: 600
+tinyproxy_default_error_file: "/usr/share/tinyproxy/default.html"
+tinyproxy_stat_file: "/usr/share/tinyproxy/stats.html"
+tinyproxy_syslog: On
+tinyproxy_log_level: Connect
+tinyproxy_pid_file: "/var/run/tinyproxy/tinyproxy.pid"
+tinyproxy_disable_via_header: Yes
+tinyproxy_max_clients: 1000
+tinyproxy_min_spare_servers: 10
+tinyproxy_max_spare_servers: 30
+tinyproxy_start_servers: 10
+tinyproxy_max_request_per_child: 10000
+tinyproxy_connect_port_1: 443
+tinyproxy_connect_port_2: 563
+
+## Service options
+# Documentation
+tinyproxy_documentation_link: "http://tinyproxy.github.io/"
+
+# Owner
+tinyproxy_user: tinyproxy
+tinyproxy_group: tinyproxy
+tinyproxy_user_shell: /usr/sbin/nologin
+
+# Maximum number of files limit
+tinyproxy_max_files: 32768
+
+# Start on boot
+tinyproxy_service_enabled: True
+# Current state: started, stopped
+tinyproxy_service_state: started
+
+# Logs
+# If wanted to output the logs to a file define the following variable
+# More information at https://www.freedesktop.org/software/systemd/man/systemd.exec.html#StandardOutput=
+# tinyproxy_log_file: path_of_the_file
+tinyproxy_log_output: "{% if tinyproxy_log_file is defined %} file:{{ tinyproxy_log_file }} {% else %} journal {% endif %}"
+
+# Flags
+tinyproxy_conf_path: "{{ tinyproxy_root_path }}/tinyproxy.conf"
+tinyproxy_options:
+  - "c {{ tinyproxy_conf_path }}"
+  - "d"
+
+tinyproxy_private_tmp: true

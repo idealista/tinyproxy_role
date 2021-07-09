@@ -1,0 +1,21 @@
+##
+## tinyproxy.conf -- tinyproxy daemon configuration file
+##
+User nobody
+Group nogroup
+Port {{ tinyproxy_port }}
+Timeout {{ tinyproxy_timeout }}
+DefaultErrorFile "/usr/share/tinyproxy/default.html"
+StatFile "/usr/share/tinyproxy/stats.html"
+Syslog On
+#LogLevel Info
+LogLevel Connect
+PidFile "/var/run/tinyproxy/tinyproxy.pid"
+MaxClients {{ tinyproxy_max_clients }}
+MinSpareServers {{ tinyproxy_min_spare_servers }}
+MaxSpareServers {{ tinyproxy_max_spare_servers }}
+StartServers {{ tinyproxy_start_servers }}
+MaxRequestsPerChild {{ tinyproxy_max_request_per_child }}
+DisableViaHeader Yes
+ConnectPort 443
+ConnectPort 563

@@ -1,0 +1,7 @@
+---
+
+- name: restart tinyproxy
+  systemd:
+    name: tinyproxy
+    state: restarted
+  when: tinyproxy_service_state != 'stopped'

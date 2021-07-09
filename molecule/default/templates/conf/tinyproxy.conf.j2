@@ -1,0 +1,20 @@
+##
+## tinyproxy.conf -- tinyproxy daemon configuration file
+##
+User {{ tinyproxy_user_conf }}
+Group {{ tinyproxy_group_conf }}
+Port {{ tinyproxy_port }}
+Timeout {{ tinyproxy_timeout }}
+DefaultErrorFile {{ tinyproxy_default_error_file }}
+StatFile {{ tinyproxy_stat_file }}
+Syslog {{ tinyproxy_syslog }}
+LogLevel {{ tinyproxy_log_level }}
+PidFile {{ tinyproxy_pid_file }}
+MaxClients {{ tinyproxy_max_clients }}
+MinSpareServers {{ tinyproxy_min_spare_servers }}
+MaxSpareServers {{ tinyproxy_max_spare_servers }}
+StartServers {{ tinyproxy_start_servers }}
+MaxRequestsPerChild {{ tinyproxy_max_request_per_child }}
+DisableViaHeader {{ tinyproxy_disable_via_header }}
+ConnectPort {{ tinyproxy_connect_port_1 }}
+ConnectPort {{ tinyproxy_connect_port_2 }}

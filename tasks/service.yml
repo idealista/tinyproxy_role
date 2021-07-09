@@ -1,0 +1,21 @@
+---
+
+- name: TINYPROXY | Copy Daemon script
+  template:
+    src: tinyproxy.service.j2
+    dest: /etc/systemd/system/tinyproxy.service
+    mode: 0644
+    owner: root
+    group: root
+  notify: restart tinyproxy
+  tags:
+    - tinyproxy_service
+
+- name: TINYPROXY | Configuring service
+  systemd:
+    name: tinyproxy
+    state: "{{ tinyproxy_service_state }}"
+    enabled: "{{ tinyproxy_service_enabled }}"
+    daemon_reload: yes
+  tags:
+    - tinyproxy_service

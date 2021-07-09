@@ -1,0 +1,5 @@
+---
+- name: Converge
+  hosts: tinyproxy_group
+  roles:
+    - role: tinyproxy_role

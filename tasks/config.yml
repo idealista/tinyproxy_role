@@ -1,0 +1,11 @@
+---
+
+- name: TINYPROXY | Add config file
+  template:
+    src: "{{ tinyproxy_config_template_file }}"
+    dest: "{{ tinyproxy_root_path }}/tinyproxy.conf"
+    owner: "{{ tinyproxy_user }}"
+    group: "{{ tinyproxy_group }}"
+    mode: 0600
+  tags:
+    - tinyproxy_configure

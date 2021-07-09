@@ -1,0 +1,43 @@
+---
+## TODO: Remember to adapt goss tests to your convenience
+
+group:
+  {{ tinyproxy_group }}:
+    exists: true
+
+user:
+  {{ tinyproxy_user }}:
+      exists: true
+      groups:
+        - {{ tinyproxy_group }}
+      shell: {{ tinyproxy_user_shell }}
+
+service:
+  tinyproxy:
+    enabled: true
+    running: true
+
+file:
+  {{ tinyproxy_root_path }}:
+    owner: root
+    group: root
+    exists: true
+    filetype: directory
+  {{ tinyproxy_bin_path }}:
+    owner: root
+    group: root
+    exists: true
+    filetype: directory
+  {{ tinyproxy_root_path }}/tinyproxy.conf:
+    exists: true
+  /usr/bin/tinyproxy:
+    exists: true
+
+http:
+  https://example.org:
+    status: 200
+    proxy: http://localhost:{{ tinyproxy_port }}
+    request-headers:
+      - "Proxy-agent: tinyproxy/{{ tinyproxy_version }}"
+    body:
+      - "Example Domain"
