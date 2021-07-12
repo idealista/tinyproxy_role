@@ -29,7 +29,7 @@ tinyproxy_exec_name: tinyproxy
 tinyproxy_config_template_file: "templates/tinyproxy/tinyproxy.conf.j2"
 tinyproxy_user_conf: nobody
 tinyproxy_group_conf: nogroup
-tinyproxy_port: 1080
+tinyproxy_port: 80
 tinyproxy_timeout: 600
 tinyproxy_default_error_file: "/usr/share/tinyproxy/default.html"
 tinyproxy_stat_file: "/usr/share/tinyproxy/stats.html"
