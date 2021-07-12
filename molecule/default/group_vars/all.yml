@@ -1,3 +1,4 @@
 ---
 
 tinyproxy_private_tmp: false
+tinyproxy_port: 1080
